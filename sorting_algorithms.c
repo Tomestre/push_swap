@@ -1,5 +1,20 @@
 #include "push_swap.h"
 
+static int is_sorted(t_stack *a)
+{
+    if (!a || !a->top)
+        return 1;
+    t_node *current = a->top;
+    int steps = a->size - 1;
+    while (steps--)
+    {
+        if (current->value > current->next->value)
+            return 0;
+        current = current->next;
+    }
+    return 1;
+}
+
 void sort_stack(t_stack *a, t_stack *b)
 {
     t_node *current_a = a->top;
@@ -9,7 +24,10 @@ void sort_stack(t_stack *a, t_stack *b)
     t_node *second_a = current_a->next;
     t_node *second_b = current_b->next;
 
-    if(current_a->value > second_a->value && current_b->value > second_b->value)
+    if (!a || is_sorted(a))
+        return;
+
+    else if(current_a->value > second_a->value && current_b->value > second_b->value)
         ss(a, b);
    else if(current_a->value > bottow_a->value && current_b->value < bottow_b->value)
             rrr(a, b);
@@ -21,4 +39,5 @@ void sort_stack(t_stack *a, t_stack *b)
         rra(a);
     else if(current_b->value < bottow_b->value)
         rrb(b);
+    return;
 }
