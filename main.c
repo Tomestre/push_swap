@@ -1,14 +1,18 @@
 #include "push_swap.h"
 
-int main(int argc, char **argv) {
-    if (argc < 2) {
+int main(int argc, char **argv)
+{
+    if (argc < 2)
         return 0;
-    }
 
-    // Inicializar stack
-    t_stack *a = malloc(sizeof(t_stack));
-    t_stack *b = malloc(sizeof(t_stack));
-    if (!a || !b) {
+    // Inicializar pilhas
+    t_stack *a = ft_calloc(1, sizeof(t_stack));
+    t_stack *b = ft_calloc(1, sizeof(t_stack));
+    if (!a || !b)
+    {
+        ft_putstr_fd("Error\n", 2);
+        free_stack(a);
+        free_stack(b);
         return 1;
     }
     a->top = NULL;
@@ -16,27 +20,51 @@ int main(int argc, char **argv) {
     b->top = NULL;
     b->size = 0;
 
-    // Parsear entrada (simplificado por agora)
-    for (int i = 1; i < argc; i++) {
-        int value = atoi(argv[i]);
+    // Parsear e preencher pilha A (primeiro argumento no topo)
+    int i = argc - 1;
+    while (i >= 1)
+    {
+        if (!is_valid_integer(argv[i]))
+        {
+            ft_putstr_fd("Error\n", 2);
+            free_stack(a);
+            free_stack(b);
+            return 1;
+        }
+        int value = ft_atoi(argv[i]);
+        if (check_duplicates(a, value))
+        {
+            ft_putstr_fd("Error\n", 2);
+            free_stack(a);
+            free_stack(b);
+            return 1;
+        }
         t_node *node = new_node(value);
-        if (!node) {
-            // Tratar erro
+        if (!node)
+        {
+            ft_putstr_fd("Error\n", 2);
+            free_stack(a);
+            free_stack(b);
             return 1;
         }
         push(a, node);
+        i--;
     }
 
-    // Aqui você adicionará o algoritmo de ordenação
-    // Por enquanto, apenas um teste simples
-    if (a->size >= 2) {
-        sa(a);
-    }
+    // Imprimir pilhas antes da operação
+    print_stack(a, "Stack A");
+    print_stack(b, "Stack B");
 
-    // Liberar memória (a ser implementado)
-    // free_stacks(a, b);
+    // Chamar algoritmo de ordenação
+    sort_stack(a, b);
 
-    free(a);
-    free(b);
+        // Imprimir pilhas após a operação
+        ft_putstr_fd("Final\n", 1);
+        print_stack(a, "Stack A");
+        print_stack(b, "Stack B");
+
+    // Liberar memória
+    free_stack(a);
+    free_stack(b);
     return 0;
 }

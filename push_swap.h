@@ -19,6 +19,8 @@ typedef struct s_stack {
 // Funções de utils.c
 int is_valid_integer(char *str);
 int check_duplicates(t_stack *stack, int value);
+void print_stack(t_stack *stack, char *name);
+
 
 // Funções de stack_operations.c
 t_node *new_node(int value);

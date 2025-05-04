@@ -1,28 +1,28 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "push_swap.h"
 
-// Função para criar um novo nó
-t_node *new_node(int value) {
-    t_node *node = malloc(sizeof(t_node));
-    if (!node) {
+t_node *new_node(int value)
+{
+    t_node *node = ft_calloc(1, sizeof(t_node));
+    if (!node)
         return NULL;
-    }
     node->value = value;
     node->next = NULL;
     node->prev = NULL;
     return node;
 }
 
-void push(t_stack *stack, t_node *node) {
-    if (!stack || !node) {
+void push(t_stack *stack, t_node *node)
+{
+    if (!stack || !node)
         return;
-    }
-    if (stack->top == NULL) {
+    if (stack->top == NULL)
+    {
         stack->top = node;
         node->next = node;
         node->prev = node;
-    } else {
+    }
+    else
+    {
         node->next = stack->top;
         node->prev = stack->top->prev;
         stack->top->prev->next = node;
@@ -32,14 +32,17 @@ void push(t_stack *stack, t_node *node) {
     stack->size++;
 }
 
-t_node *pop(t_stack *stack) {
-    if (!stack || stack->top == NULL) {
+t_node *pop(t_stack *stack)
+{
+    if (!stack || stack->top == NULL)
         return NULL;
-    }
     t_node *node = stack->top;
-    if (stack->size == 1) {
+    if (stack->size == 1)
+    {
         stack->top = NULL;
-    } else {
+    }
+    else
+    {
         stack->top = node->next;
         node->prev->next = node->next;
         node->next->prev = node->prev;
@@ -50,91 +53,114 @@ t_node *pop(t_stack *stack) {
     return node;
 }
 
-// Operações básicas
-void sa(t_stack *a) {
-    if (a->size < 2) {
+void free_stack(t_stack *stack)
+{
+    if (!stack)
         return;
+    t_node *current = stack->top;
+    if (current != NULL)
+    {
+        t_node *next = current->next;
+        while (next != stack->top)
+        {
+            free(current);
+            current = next;
+            next = next->next;
+        }
+        free(current);
     }
+    free(stack);
+}
+
+void sa(t_stack *a)
+{
+    if (a->size < 2)
+        return;
     t_node *first = pop(a);
     t_node *second = pop(a);
     push(a, first);
     push(a, second);
-    printf("sa\n");
+    ft_putstr_fd("sa\n", 1);
 }
-void sb(t_stack *b) {
-    if (b->size < 2) {
+
+void sb(t_stack *b)
+{
+    if (b->size < 2)
         return;
-    }
     t_node *first = pop(b);
     t_node *second = pop(b);
     push(b, first);
     push(b, second);
-    printf("sb\n");
+    ft_putstr_fd("sb\n", 1);
 }
+
 void ss(t_stack *a, t_stack *b)
 {
     sa(a);
     sb(b);
-    printf("ss\n");
+    ft_putstr_fd("ss\n", 1);
 }
-void pa(t_stack *a, t_stack *b) {
-    if (b->size == 0) {
+
+void pa(t_stack *a, t_stack *b)
+{
+    if (b->size == 0)
         return;
-    }
     t_node *node = pop(b);
     push(a, node);
-    printf("pa\n");
+    ft_putstr_fd("pa\n", 1);
 }
 
-void pb(t_stack *a, t_stack *b) {
-    if (a->size == 0) {
+void pb(t_stack *a, t_stack *b)
+{
+    if (a->size == 0)
         return;
-    }
     t_node *node = pop(a);
     push(b, node);
-    printf("pb\n");
+    ft_putstr_fd("pb\n", 1);
 }
 
-void ra(t_stack *a) {
-    if (a->size <= 1) {
+void ra(t_stack *a)
+{
+    if (a->size <= 1)
         return;
-    }
     a->top = a->top->next;
-    printf("ra\n");
+    ft_putstr_fd("ra\n", 1);
 }
-void rb(t_stack *b) {
-    if (b->size <= 1) {
+
+void rb(t_stack *b)
+{
+    if (b->size <= 1)
         return;
-    }
     b->top = b->top->next;
-    printf("rb\n");
+    ft_putstr_fd("rb\n", 1);
 }
+
 void rr(t_stack *a, t_stack *b)
 {
     ra(a);
     rb(b);
-    printf("rb\n")
+    ft_putstr_fd("rr\n", 1);
 }
 
-void rra(t_stack *a) {
-    if (a->size <= 1) {
+void rra(t_stack *a)
+{
+    if (a->size <= 1)
         return;
-    }
     a->top = a->top->prev;
-    printf("rra\n");
+    ft_putstr_fd("rra\n", 1);
 }
 
-void rrb(t_stack *b) {
-    if (a->size <= 1) {
+void rrb(t_stack *b)
+{
+    if (b->size <= 1)
         return;
-    }
     b->top = b->top->prev;
-    printf("rrb\n");
+    ft_putstr_fd("rrb\n", 1);
 }
 
 void rrr(t_stack *a, t_stack *b)
 {
     rra(a);
     rrb(b);
-    printf("rrr\n")
+    ft_putstr_fd("rrr\n", 1);
 }
