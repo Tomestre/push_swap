@@ -76,7 +76,7 @@ void sort_stack(t_stack *a, t_stack *b)
     }
  }
 
- ft_putstr_fd("Inicio da etapa 2\n\n", 1);
+ /*ft_putstr_fd("Inicio da etapa 2\n\n", 1);*/
  while (b->size > 0)
  {
     int top_b = b->top->value;
@@ -86,33 +86,45 @@ void sort_stack(t_stack *a, t_stack *b)
     int bottow_a = a->top ? a->top->prev->value : 0;
 
 
-    print_stack(a, "Stack A");
-    print_stack(b, "Stack B");
 
+    if(next_b > top_a && next_b > next_a && next_b > top_b)
+    {
+        sb(b);
+        if(top_a > next_a)
+        {
+            sa(a);
+        }
+        pa(a, b);
+        sa(a);
+        pb(a, b);
+    }
     if(top_a > next_a)
     {
-        sa(a);
-        print_stack(a, "Stack A");
-        print_stack(b, "Stack B");
+         sa(a);
     }
     else if(top_b < next_b)
     {
         sb(b);
-        print_stack(a, "Stack A");
-        print_stack(b, "Stack B");
     }
     else if(top_a > bottow_a)
     {
         rra(a);
-        print_stack(a, "Stack A");
-        print_stack(b, "Stack B");
     }
     else{
         pa(a, b);
-        print_stack(a, "Stack A");
-        print_stack(b, "Stack B");
 
     }
+
+    top_a = a->top ? a->top->value : 0;
+
+    if(top_a > next_a && a->size > 3)
+
+        {
+            ra(a);
+            sa(a);
+            pb(a, b);
+            rra(a);
+        }
 
  }
 return;
