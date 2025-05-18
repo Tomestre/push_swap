@@ -96,8 +96,18 @@ void sb(t_stack *b)
 
 void ss(t_stack *a, t_stack *b)
 {
-    sa(a);
-    sb(b);
+    if (a->size < 2)
+        return;
+    t_node *first_a = pop(a);
+    t_node *second_a = pop(a);
+    push(a, first_a);
+    push(a, second_a);
+    if (b->size < 2)
+        return;
+    t_node *first_b = pop(b);
+    t_node *second_b = pop(b);
+    push(b, first_b);
+    push(b, second_b);
     ft_putstr_fd("ss\n", 1);
 }
 
@@ -137,8 +147,12 @@ void rb(t_stack *b)
 
 void rr(t_stack *a, t_stack *b)
 {
-    ra(a);
-    rb(b);
+    if (a->size <= 1)
+        return;
+    a->top = a->top->next;
+    if (b->size <= 1)
+        return;
+    b->top = b->top->next;
     ft_putstr_fd("rr\n", 1);
 }
 
@@ -160,7 +174,11 @@ void rrb(t_stack *b)
 
 void rrr(t_stack *a, t_stack *b)
 {
-    rra(a);
-    rrb(b);
+    if (a->size <= 1)
+        return;
+    a->top = a->top->prev;
+    if (b->size <= 1)
+        return;
+    b->top = b->top->prev;
     ft_putstr_fd("rrr\n", 1);
 }

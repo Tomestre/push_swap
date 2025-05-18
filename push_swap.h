@@ -38,7 +38,6 @@ void rr(t_stack *a, t_stack *b);
 void rra(t_stack *a);
 void rrb(t_stack *b);
 void rrr(t_stack *a, t_stack *b);
-static int is_sorted(t_stack *a);
 
 // Funções de sorting_algorithms.c
 void sort_stack(t_stack *a, t_stack *b);
