@@ -36,7 +36,7 @@ int check_duplicates(t_stack *stack, int value)
     return 0;
 }
 
-/*void print_stack(t_stack *stack, char *name)
+void print_stack(t_stack *stack, char *name)
 {
     ft_putstr_fd(name, 1);
     ft_putstr_fd(":\n", 1);
@@ -55,4 +55,4 @@ int check_duplicates(t_stack *stack, int value)
         current = current->next;
     }
     ft_putstr_fd("-----\n", 1);
-}*/
+}

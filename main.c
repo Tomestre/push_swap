@@ -52,16 +52,16 @@ int main(int argc, char **argv)
     }
 
    // Imprimir pilhas antes da operação
-    /*print_stack(a, "Stack A");
-    print_stack(b, "Stack B");*/
+    print_stack(a, "Stack A");
+    print_stack(b, "Stack B");
 
     // Chamar algoritmo de ordenação
     sort_stack(a, b);
 
         // Imprimir pilhas após a operação
-       /* ft_putstr_fd("Final\n", 1);
+        ft_putstr_fd("Final\n", 1);
         print_stack(a, "Stack A");
-        print_stack(b, "Stack B");*/
+        print_stack(b, "Stack B");
 
     // Liberar memória
     free_stack(a);
