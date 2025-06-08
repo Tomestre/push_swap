@@ -103,6 +103,10 @@ void sort_stack(t_stack *a, t_stack *b)
 	{
 		mark_target_nodes(a, b); // Marca os nós alvo na pilha A
 
-		
+		// Rotaciona A até o target_node do topo de B estar no topo
+		while (a->top != b->top->target_node)
+			ra(a); // ou rra(a), se quiser otimizar depois
+
+		pa(a, b); // Move o topo de B para o topo de A
 	}
 }
