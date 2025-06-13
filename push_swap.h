@@ -7,7 +7,7 @@
 // Estrutura para um nó da lista duplamente ligada
 typedef struct s_node {
     int value;
-    struct  s_node *target_node;
+    int rank;
     struct s_node *next;
     struct s_node *prev;
 } t_node;

@@ -11,6 +11,53 @@ t_node *new_node(int value)
 	return node;
 }
 
+void bubble_sort(int *values, int size)
+{
+    int i = 0;
+    while (i < size - 1) {
+        int j = 0;
+        while (j < size - i - 1) {
+            if (values[j] > values[j + 1]) {
+                int tmp = values[j];
+                values[j] = values[j + 1];
+                values[j + 1] = tmp;
+            }
+            j++;
+        }
+        i++;
+    }
+}
+
+void ranking(t_stack *stack)
+{
+    if (stack->size == 0)
+        return;
+
+    int *values = malloc(sizeof(int) * stack->size);
+    if (!values)
+        return;
+
+    t_node *current = stack->top;
+    int i = 0;
+    while (i < stack->size) {
+        values[i] = current->value;
+        current = current->next;
+        i++;
+    }
+    bubble_sort(values, stack->size);
+    current = stack->top;
+    i = 0;
+    while (i < stack->size) {
+        int rank = 0;
+        while (rank < stack->size && values[rank] != current->value)
+            rank++;
+        current->ranking = rank;
+        current = current->next;
+        i++;
+    }
+    free(values);
+}
+
 void push(t_stack *stack, t_node *node)
 {
 	if (!stack || !node)

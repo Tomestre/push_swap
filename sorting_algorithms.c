@@ -1,112 +1,86 @@
 #include "push_swap.h"
 
-static t_node *find_smallest(t_stack a)
+int is_sorted(t_stack *a)
 {
-	t_node *current_a;
-	t_node *smallest;
-	current_a = a->top->next;
-
-	smallest = current_a;
-	while(current_a != a->top)
-	{
-		if(current_a->value < smallest->value)
-			smallest = current_a;
-		current_a = current_a->next;
+	if (a->size < 2)
+		return 1;
+	t_node *current = a->top;
+	while (current->next != a->top) {
+		if (current->value > current->next->value)
+			return 0;
+		current = current->next;
 	}
-	return(smallest);
+	return 1;
 }
-static sort_b(t_stack *a, t_stack *b) 
+int is_better_rra(t_stack *a, int bit)
 {
-	while (b->size > 2) 
-	{
-		if (b->top->value < b->top->next->value)
-		{
-			sb(b);
-		}
-		else if (b->top->value < b->top->prev->value) 
-		{
-			rb(b);
-		}
-	}
+    int cost_ra = 0;
+    t_node *current = a->top;
+    int has_zero = 0;
+    while (current && cost_ra < a->size) {
+        if (((current->ranking >> bit) & 1) == 0) {
+            has_zero = 1;
+            break;
+        }
+        cost_ra++;
+        current = current->next;
+    }
+    if (!has_zero)
+        return 0;
+
+    int cost_rra = 0;
+    current = a->top->prev;
+    while (current && cost_rra < a->size) {
+        if (((current->ranking >> bit) & 1) == 0)
+            break;
+        cost_rra++;
+        current = current->prev;
+    }
+    cost_rra++;
+
+    return cost_rra < cost_ra;
 }
-static void mark_target_nodes(t_stack *a, t_stack *b) 
+int has_bit_zero(t_stack *a, int bit)
 {
-	t_node *current_a;
-	t_node *target_node;
-	long best_match_i;
-
-	
-
-	while (b) 
-	{
-		best_match_i = LONG_MAX;
-		current_a = a;
-		while(current_a) 
-		{
-			if (current_a->value > b->value && current_a->value < best_match_i) 
-			{
-				best_match_i = current_a->value;
-				target_node = current_a;
-			}
-			current_a = current_a->next;
-		}
-		if(LONG_MAX == best_match_i) 
-			target_node = find_smallest(a);
-		else
-			b->target_node = target_node;
-		b = b->next;
-	}
+    t_node *current = a->top;
+    int i = 0;
+    while (i < a->size) {
+        if (((current->ranking >> bit) & 1) == 0)
+            return 1; // Encontrou um elemento com bit 0
+        current = current->next;
+        i++;
+    }
+    return 0; // Nenhum elemento tem bit 0
 }
-
-void sort_stack(t_stack *a, t_stack *b) 
+void process_bit(t_stack *a, t_stack *b, int bit) 
 {
-	size_t i;
-		
-	while (a->size > 3) 
-	{
-		while (a->size != 3)
-		{
-			sort_b(a, b); // Ordena a pilha B antes de mover o menor para B
-
-			if(a->top->value > a->top->next->value) {
-					sa(a); // Ordena os dois primeiros se necessário
-				}
-			else if (a->top->value > a->top->prev->value) {
-					rra(a); // Coloca o menor no topo
-				}
-				
-			pb(a, b); // Move o menor para a pilha B
-		}
-	}
-
-	if (a->size <= 3) // Se a pilha A tiver 3 ou menos elementos, ordena diretamente
-	{
-		i= 0;
-		while(i < a->size)
-		{
-			if(a->top->value > a->top->next->value) {
-				sa(a); // Ordena os dois primeiros se necessário
-			}
-			else if (a->top->value > a->top->prev->value) {
-				rra(a); // Coloca o menor no topo
-			}
-			i++;
-		}
-		
+	if (is_sorted(a) || !has_bit_zero(a, bit))
 		return;
-	}
-	// Ordena a pilha B
-	sort_b(a, b);
-
-	//segunda etapa
-	while(b->size > 0) 
-	{
-		mark_target_nodes(a, b); // Marca os nós alvo na pilha A
-
-		// Rotaciona A até o target_node do topo de B estar no topo
-		while (a->top != b->top->target_node)
-			ra(a); // ou rra(a), se quiser otimizar depois
-
-		pa(a, b); // Move o topo de B para o topo de A
-	}
+    int total = a->size;
+    int count = 0;
+    while (count < total) {
+        if (((a->top->ranking >> bit) & 1) == 0) {
+            pb(a, b);
+        } else {
+			if(is_better_rra(a, bit))
+				rra(a);
+			else
+            	ra(a);
+        }
+        count++;
+    }
+    while (b->size > 0) {
+        pa(a, b);
+    }
 }
+
+void sort_stack(t_stack *a, t_stack *b)
+{
+    ranking(a);
+    int max_rank = a->size - 1;
+    int bit = 0;
+    while ((1 << bit) <= max_rank) {
+        process_bit(a, b, bit);
+        bit++;
+    }
+}    
