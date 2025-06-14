@@ -16,7 +16,7 @@ void sort_stack(t_stack *a, t_stack *b)
 {
     int min_cost = INT_MAX;
     t_node *best_element = NULL;
-    t_node *current = stack_a->head;
+    t_node *current = stack_a->top;
 
     while (current)
     {
