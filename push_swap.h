@@ -10,6 +10,10 @@ typedef struct s_node {
     int rank;
     struct s_node *next;
     struct s_node *prev;
+    int position_a;
+    int position_b;
+    int direction;
+    int is_sorted;
 } t_node;
 
 // Estrutura para a pilha
@@ -22,6 +26,8 @@ typedef struct s_stack {
 int is_valid_integer(char *str);
 int check_duplicates(t_stack *stack, int value);
 void print_stack(t_stack *stack, char *name);
+void calculate_position(t_stack *a)
+void ranking(t_stack *stack)
 
 
 // Funções de stack_operations.c
@@ -43,5 +49,6 @@ void rrr(t_stack *a, t_stack *b);
 
 // Funções de sorting_algorithms.c
 void sort_stack(t_stack *a, t_stack *b);
+
 
 #endif

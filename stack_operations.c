@@ -57,6 +57,101 @@ void ranking(t_stack *stack)
     }
     free(values);
 }
+void calculate_position_a(t_stack *a)
+{
+	if (!a || a->size == 0)
+		return;
+	t_node *current_a = a->top;
+	int position = 0;
+	while (position < a->size)
+	{
+		current_a->position_a = position;
+		current_a = current_a->next;
+		position++;
+	}
+}
+void calculate_position_b(t_stack *b)
+{
+	if (!b || b->size == 0)
+		return;
+	t_node *current_b = b->top;
+	int position = 0;
+	while (position < b->size)
+	{
+		current_b->position_b = position;
+		current_b = current_b->next;
+		position++;
+	}
+}
+int calculate_cost_a(t_node *node, int size_a)
+{
+    if (!node)
+        return -1;
+    int ra = node->position_a;         // Quantos "ra" para levar ao topo
+    int rra = size_a - node->position_a; // Quantos "rra" para levar ao topo
+    return min(ra, rra);               // Menor custo entre ra e rra
+}
+int calculate_cost_b(int target_position, int size_b)
+{
+    int rb = target_position;         // Quantos "rb" para levar a posição alvo ao topo
+    int rrb = size_b - target_position; // Quantos "rrb" para levar a posição alvo ao topo
+    return min(rb, rrb);              // Menor custo entre rb e rrb
+}
+int find_target_position_in_b(t_stack *b, int value)
+{
+    if (!b || b->size == 0)
+        return 0; // Se B está vazia, a posição é 0
+    t_node *current = b->top;
+    int position = 0;
+    while (position < b->size)
+    {
+        if (value > current->value) // Encontrou a posição onde value deve ir
+            return position;
+        current = current->next;
+        position++;
+    }
+    return b->size; // Se value é menor que todos em B, vai para o fundo
+}
+
+int total_coast(t_node *node_a, t_stack *a, t_stack *b)
+{
+    if (!node_a || !a || !b)
+        return -1;
+
+    // Variável 1: custo para mover node_a ao topo de A
+    int cost_a = (node_a->position_a < a->size - node_a->position_a) 
+                 ? node_a->position_a 
+                 : a->size - node_a->position_a;
+
+    // Variável 2: direção de rotação em A (1 para ra, -1 para rra)
+    int dir_a = (node_a->position_a < a->size - node_a->position_a) ? 1 : -1;
+
+    // Variável 3: posição alvo em B
+    int target_pos_b = find_target_position_in_b(b, node_a->value);
+
+    // Variável 4: custo para mover target_pos_b ao topo de B
+    int cost_b = (target_pos_b < b->size - target_pos_b) 
+                 ? target_pos_b 
+                 : b->size - target_pos_b;
+
+    // Variável 5: direção de rotação em B (1 para rb, -1 para rrb)
+    int dir_b = (target_pos_b < b->size - target_pos_b) ? 1 : -1;
+
+    // Cálculo do custo total
+    if (dir_a == dir_b)
+    {
+        // Se as direções são iguais, usar o maior custo + 1 (rotações simultâneas)
+        return (cost_a > cost_b ? cost_a : cost_b) + 1;
+    }
+    // Se direções são diferentes, somar os custos + 1
+    return cost_a + cost_b + 1;
+}
+
+int min(int a, int b)
+{
+	return (a < b) ? a : b;
+}
+
 
 void push(t_stack *stack, t_node *node)
 {
