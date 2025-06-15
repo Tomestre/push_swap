@@ -26,8 +26,7 @@ typedef struct s_stack {
 int is_valid_integer(char *str);
 int check_duplicates(t_stack *stack, int value);
 void print_stack(t_stack *stack, char *name);
-void calculate_position(t_stack *a)
-void ranking(t_stack *stack)
+void ranking(t_stack *stack);
 
 
 // Funções de stack_operations.c

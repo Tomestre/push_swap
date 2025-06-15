@@ -11,6 +11,12 @@ t_node *new_node(int value)
 	return node;
 }
 
+int min(int a, int b)
+{
+	return (a < b) ? a : b;
+}
+
+
 void bubble_sort(int *values, int size)
 {
     int i = 0;
@@ -51,7 +57,7 @@ void ranking(t_stack *stack)
         int rank = 0;
         while (rank < stack->size && values[rank] != current->value)
             rank++;
-        current->ranking = rank;
+        current->rank = rank;
         current = current->next;
         i++;
     }
@@ -119,8 +125,8 @@ int total_coast(t_node *node_a, t_stack *a, t_stack *b)
         return -1;
 
     // Variável 1: custo para mover node_a ao topo de A
-    int cost_a = (node_a->position_a < a->size - node_a->position_a) 
-                 ? node_a->position_a 
+    int cost_a = (node_a->position_a < a->size - node_a->position_a)
+                 ? node_a->position_a
                  : a->size - node_a->position_a;
 
     // Variável 2: direção de rotação em A (1 para ra, -1 para rra)
@@ -130,8 +136,8 @@ int total_coast(t_node *node_a, t_stack *a, t_stack *b)
     int target_pos_b = find_target_position_in_b(b, node_a->value);
 
     // Variável 4: custo para mover target_pos_b ao topo de B
-    int cost_b = (target_pos_b < b->size - target_pos_b) 
-                 ? target_pos_b 
+    int cost_b = (target_pos_b < b->size - target_pos_b)
+                 ? target_pos_b
                  : b->size - target_pos_b;
 
     // Variável 5: direção de rotação em B (1 para rb, -1 para rrb)
@@ -146,12 +152,6 @@ int total_coast(t_node *node_a, t_stack *a, t_stack *b)
     // Se direções são diferentes, somar os custos + 1
     return cost_a + cost_b + 1;
 }
-
-int min(int a, int b)
-{
-	return (a < b) ? a : b;
-}
-
 
 void push(t_stack *stack, t_node *node)
 {
